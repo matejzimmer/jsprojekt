@@ -24,14 +24,53 @@ let jidloY = 5;
 let smerX = 0;
 let smerY = 0;
 
+let skore = 0;
 
 function hra() {
-clearScreen();
 poziceHada();
+let vysledek = isgameOver();
+if(vysledek){
+    return;
+}
+clearScreen();
+
 kontrolaStretu();
 jidlo();
 had();
+vypisSkore();
 setTimeout(hra, 1000/rychlost);
+}
+
+function isgameOver(){
+let gameOver = false;
+
+if(hlavaX < 0){
+    gameOver = true;
+}
+if (gameOver) {
+    ctx.fillStyle = "white";
+    ctx.font = "75px Verdana";
+
+    var gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    gradient.addColorStop("0", " magenta");
+    gradient.addColorStop("0.5", "blue");
+    gradient.addColorStop("1.0", "red");
+    
+    ctx.fillStyle = gradient;
+
+    ctx.fillText("Game Over!", canvas.width / 6.5, canvas.height / 2);
+  }
+
+  ctx.fillText("Game Over!", canvas.width / 6.5, canvas.height / 2);
+
+
+return gameOver;
+}
+
+function vypisSkore(){
+ctx.fillStyle = "white";
+ctx.font = "20px Verdana";
+ctx.fillText("Skore: " + skore, canvas.width -340, 20);
 }
 
 function clearScreen(){
@@ -62,17 +101,18 @@ function poziceHada(){
     hlavaX = hlavaX + smerX;
     hlavaY = hlavaY + smerY
 }
-
+//funkce jidlo nastavena na zlutou 
 function jidlo(){
     ctx.fillStyle = "yellow";
     ctx.fillRect(jidloX * pocetZ, jidloY * pocetZ, velikostZ, velikostZ);
 }
-
+//funkce stretu, kdyz se hlava hada dotkne jidla, jidlo jde na random pozici na plose
 function kontrolaStretu(){
     if(jidloX === hlavaX && jidloY == hlavaY){
         jidloX = Math.floor(Math.random()* velikostZ);
         jidloY = Math.floor(Math.random()* velikostZ);
         delkaTela++;
+        skore++;
     }
 }
 
