@@ -5,11 +5,15 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url(../img/231264.webp);
+    background-image: url(../img/pozadi.jpg);
 }
 canvas{
     box-shadow: black 40px 20px 70px;
 }
 h1{
-    background-color: aliceblue;
+    background-color: rgb(200, 255, 0);
+}
+.button{
+    width: 150%;
+    height: 150%;
 }
