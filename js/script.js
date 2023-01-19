@@ -1,6 +1,7 @@
 const canvas = document.getElementById('hra');
 const ctx = canvas.getContext('2d');
 
+
 class teloHada{
 constructor(x, y){
     this.x = x;
@@ -10,21 +11,24 @@ constructor(x, y){
 
 let rychlost = 7;
 
-let pocetZ = 30;
+let pocetZ = 25;
 
-let velikostZ = canvas.width / pocetZ -2;
-let hlavaX = 10;
-let hlavaY = 10;
+let velikostZ = canvas.width / pocetZ - 2;
+let hlavaX = 15;
+let hlavaY = 15;
 const telo = [];
 let delkaTela = 2;
 
-let jidloX = 5;
-let jidloY = 5;
+let jidloX = 10;
+let jidloY = 10;
 
 let smerX = 0;
 let smerY = 0;
 
 let skore = 0;
+
+const gameOverSound = new Audio("gameOver.wav");
+const eatingSound = new Audio("eating.wav")
 
 function hra() {
 poziceHada();
@@ -32,21 +36,66 @@ let vysledek = isgameOver();
 if(vysledek){
     return;
 }
-clearScreen();
+else{
+    clearScreen();
 
 kontrolaStretu();
 jidlo();
 had();
 vypisSkore();
+
+if(skore > 5){
+    rychlost = 10;
+}
+if(skore > 10){
+    rychlost = 15;
+}
+if(skore > 15){
+    rychlost = 20;
+}
+if(skore > 20){
+    rychlost = 25;
+}
+if(skore > 25){
+    rychlost = 30;
+}
+if(skore > 30){
+    rychlost = 40;
+}
+
 setTimeout(hra, 1000/rychlost);
+}
+
 }
 
 function isgameOver(){
 let gameOver = false;
 
+if ( smerY=== 0 && smerX === 0) {
+    return false;
+  }
+
 if(hlavaX < 0){
     gameOver = true;
 }
+else if (hlavaX === pocetZ -1) {
+    gameOver = true;
+  } 
+  else if (hlavaY < 0) {
+    gameOver = true;
+  } 
+  else if (hlavaY === pocetZ -1) {
+    gameOver = true;
+  }
+
+  for (let i = 0; i < telo.length; i++) {
+    let cast = telo[i];
+    if (cast.x === hlavaX && cast.y === hlavaY) {
+      gameOver = true;
+      break;
+    }
+  }
+
 if (gameOver) {
     ctx.fillStyle = "white";
     ctx.font = "75px Verdana";
@@ -59,9 +108,10 @@ if (gameOver) {
     ctx.fillStyle = gradient;
 
     ctx.fillText("Game Over!", canvas.width / 6.5, canvas.height / 2);
+    gameOverSound.play();
   }
 
-  ctx.fillText("Game Over!", canvas.width / 6.5, canvas.height / 2);
+  
 
 
 return gameOver;
@@ -78,8 +128,11 @@ function clearScreen(){
     ctx.fillRect(0,0,canvas.clientWidth,canvas.height);
 }
 
+function reset(){
+    location.reload();
+  }
+
 function had(){
-    
 
     ctx.fillStyle = "purple";
     for(let i = 0; i < telo.length; i++){
@@ -113,6 +166,7 @@ function kontrolaStretu(){
         jidloY = Math.floor(Math.random()* velikostZ);
         delkaTela++;
         skore++;
+        eatingSound.play();
     }
 }
 
